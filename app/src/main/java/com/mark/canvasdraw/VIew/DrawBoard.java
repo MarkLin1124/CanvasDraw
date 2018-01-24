@@ -218,4 +218,8 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
             }
         }
     }
+
+    public DrawCanvas getCanvas() {
+        return mCanvas;
+    }
 }

@@ -187,6 +187,14 @@ public class DrawCanvas extends View {
         invalidate();
     }
 
+    public Bitmap getBitmap() {
+        if (bitmapList.size() == 0) {
+            return null;
+        } else {
+            return bitmapList.get(bitmapList.size() - 1);
+        }
+    }
+
     public Bitmap getSignatureBitmap() {
         if (mSignature != null) {
             return mSignature;
