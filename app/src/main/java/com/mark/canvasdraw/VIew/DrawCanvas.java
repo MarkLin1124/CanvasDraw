@@ -242,4 +242,12 @@ public class DrawCanvas extends View {
     public Paint getPaint() {
         return mPaint;
     }
+
+    public void undoCanvas() {
+        if (bitmapList.size() > 0) {
+            bitmapList.remove(bitmapList.size() - 1);
+        }
+
+        invalidate();
+    }
 }

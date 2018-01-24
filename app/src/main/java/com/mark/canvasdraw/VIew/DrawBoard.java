@@ -23,7 +23,7 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
     private CircleView paintSmall, paintNormal, paintLarge;
     private ArrayList<CircleView> sizeList = new ArrayList<>();
 
-    private CircleView circlePaint, circleEraser;
+    private CircleView circlePaint, circleEraser, circleUndo;
     private ArrayList<CircleView> useList = new ArrayList<>();
 
     private DrawCanvas mCanvas;
@@ -132,6 +132,9 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
         circleEraser.setOnClickListener(this);
         useList.add(circleEraser);
 
+        circleUndo = (CircleView) findViewById(R.id.undo);
+        circleUndo.setOnClickListener(this);
+
         //default paint color
         mCanvas.initPaint(getResources().getDimension((int) paintSmall.getTag()), getResources().getColor((int) circleRed.getTag()));
         selectColor = getResources().getColor((int) circleRed.getTag());
@@ -164,6 +167,9 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
             case R.id.eraser:
                 onUseSelect((CircleView) view);
                 mCanvas.getPaint().setColor(getResources().getColor(R.color.board_background));
+                break;
+            case R.id.undo:
+                mCanvas.undoCanvas();
                 break;
         }
     }
