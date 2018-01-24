@@ -9,10 +9,8 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 
@@ -20,8 +18,8 @@ import java.io.ByteArrayOutputStream;
  * Created by marklin on 2018/1/23.
  */
 
-public class DrawBoard extends SurfaceView {
-    public static final String TAG = DrawBoard.class.getSimpleName();
+public class DrawCanvas extends SurfaceView {
+    public static final String TAG = DrawCanvas.class.getSimpleName();
 
     private float mSignatureWidth = 8f;
     private int mSignatureColor = Color.BLACK;
@@ -44,22 +42,22 @@ public class DrawBoard extends SurfaceView {
 
     private int mInvalidateExtraBorder = 10;
 
-    public DrawBoard(Context context) {
+    public DrawCanvas(Context context) {
         super(context);
         init();
     }
 
-    public DrawBoard(Context context, @Nullable AttributeSet attrs) {
+    public DrawCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public DrawBoard(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public DrawCanvas(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public DrawBoard(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public DrawCanvas(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
