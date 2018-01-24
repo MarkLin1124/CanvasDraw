@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mark.canvasdraw.VIew.DrawCanvas
+        android:id="@+id/canvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/view_divide"
+        android:background="@color/board_background" />
+
+    <View
+        android:id="@+id/view_divide"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:layout_above="@+id/ll_control_bar"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:id="@+id/ll_control_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/board_background"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_red"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/red" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_orange"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/orange" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_yellow"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/yellow" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_green"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/green" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_blue"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/blue" />
+
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_dark_blue"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/dark_blue" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_purple"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/purple" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_black"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@android:color/black" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_white"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@android:color/white" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/circle_brown"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/brown" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/paint_small"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/red"
+                app:radius="@dimen/circle_radius_small" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/paint_normal"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/red"
+                app:radius="@dimen/circle_radius_normal" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/paint_large"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                app:paint="@color/red"
+                app:radius="@dimen/circle_radius_large" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/paint"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_paint" />
+
+            <com.mark.canvasdraw.VIew.CircleView
+                android:id="@+id/eraser"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_eraser" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
