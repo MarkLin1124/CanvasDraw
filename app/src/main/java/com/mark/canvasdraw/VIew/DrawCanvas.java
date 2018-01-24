@@ -10,20 +10,19 @@ import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
+import android.view.View;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 /**
  * Created by marklin on 2018/1/23.
  */
 
-public class DrawCanvas extends SurfaceView {
+public class DrawCanvas extends View {
     public static final String TAG = DrawCanvas.class.getSimpleName();
 
     private float mSignatureWidth = 8f;
-    private int mSignatureColor = Color.BLACK;
-    private boolean mCapturing = true;
     private Bitmap mSignature = null;
 
     private static final boolean GESTURE_RENDERING_ANTIALIAS = true;
@@ -41,6 +40,7 @@ public class DrawCanvas extends SurfaceView {
     private float mCurveEndY;
 
     private int mInvalidateExtraBorder = 10;
+    private ArrayList<Bitmap> bitmapList = new ArrayList<>();
 
     public DrawCanvas(Context context) {
         super(context);
@@ -66,37 +66,31 @@ public class DrawCanvas extends SurfaceView {
         setWillNotDraw(false);
 
         mPaint.setAntiAlias(GESTURE_RENDERING_ANTIALIAS);
-        mPaint.setColor(mSignatureColor);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(mSignatureWidth);
         mPaint.setDither(DITHER_FLAG);
         mPath.reset();
+    }
 
-
+    public void initPaint(float paintWidth, int paintColor) {
+        mPaint.setColor(paintColor);
+        mPaint.setStrokeWidth(paintWidth);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-
-        if (mSignature != null) {
-            canvas.drawBitmap(mSignature, null, new Rect(0, 0, getWidth(),
-                    getHeight()), null);
-        } else {
-            canvas.drawPath(mPath, mPaint);
+        if (bitmapList.size() > 0) {
+            canvas.drawBitmap(bitmapList.get(bitmapList.size() - 1), null, new Rect(0, 0, getWidth(), getHeight()), null);
         }
-
+        canvas.drawPath(mPath, mPaint);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (mCapturing) {
-            processEvent(event);
-            return true;
-        } else {
-            return false;
-        }
+        processEvent(event);
+        return true;
     }
 
     private boolean processEvent(MotionEvent event) {
@@ -106,21 +100,13 @@ public class DrawCanvas extends SurfaceView {
                 invalidate();
                 return true;
             case MotionEvent.ACTION_MOVE:
-
                 Rect rect = touchMove(event);
                 if (rect != null) {
                     invalidate(rect);
                 }
                 return true;
-
             case MotionEvent.ACTION_UP:
-                touchUp(event, false);
-                invalidate();
-                return true;
-
-            case MotionEvent.ACTION_CANCEL:
-                touchUp(event, true);
-                invalidate();
+                touchUp();
                 return true;
         }
 
@@ -128,9 +114,17 @@ public class DrawCanvas extends SurfaceView {
 
     }
 
-    private void touchUp(MotionEvent event, boolean b) {
-        // TODO Auto-generated method stub
+    private void touchUp() {
+        final Bitmap bmp = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmp);
+        if (bitmapList.size() > 0) {
+            c.drawBitmap(bitmapList.get(bitmapList.size() - 1), null, new Rect(0, 0, getWidth(), getHeight()), null);
+        }
 
+        c.drawPath(mPath, mPaint);
+        bitmapList.add(bmp);
+
+        clear();
     }
 
     private Rect touchMove(MotionEvent event) {
@@ -146,8 +140,7 @@ public class DrawCanvas extends SurfaceView {
 
         // start with the curve end
         final int border = mInvalidateExtraBorder;
-        areaToRefresh.set((int) mCurveEndX - border, (int) mCurveEndY - border,
-                (int) mCurveEndX + border, (int) mCurveEndY + border);
+        areaToRefresh.set((int) mCurveEndX - border, (int) mCurveEndY - border, (int) mCurveEndX + border, (int) mCurveEndY + border);
 
         float cX = mCurveEndX = (x + previousX) / 2;
         float cY = mCurveEndY = (y + previousY) / 2;
@@ -155,12 +148,10 @@ public class DrawCanvas extends SurfaceView {
         mPath.quadTo(previousX, previousY, cX, cY);
 
         // union with the control point of the new curve
-        areaToRefresh.union((int) previousX - border, (int) previousY - border,
-                (int) previousX + border, (int) previousY + border);
+        areaToRefresh.union((int) previousX - border, (int) previousY - border, (int) previousX + border, (int) previousY + border);
 
         // union with the end point of the new curve
-        areaToRefresh.union((int) cX - border, (int) cY - border, (int) cX
-                + border, (int) cY + border);
+        areaToRefresh.union((int) cX - border, (int) cY - border, (int) cX + border, (int) cY + border);
 
         mX = x;
         mY = y;
@@ -178,31 +169,17 @@ public class DrawCanvas extends SurfaceView {
         mPath.moveTo(x, y);
 
         final int border = mInvalidateExtraBorder;
-        mInvalidRect.set((int) x - border, (int) y - border, (int) x + border,
-                (int) y + border);
+        mInvalidRect.set((int) x - border, (int) y - border, (int) x + border, (int) y + border);
 
         mCurveEndX = x;
         mCurveEndY = y;
 
     }
 
-
-    /**
-     * Erases the signature.
-     */
     public void clear() {
         mSignature = null;
         mPath.rewind();
-        // Repaints the entire view.
         invalidate();
-    }
-
-    public boolean isCapturing() {
-        return mCapturing;
-    }
-
-    public void setIsCapturing(boolean mCapturing) {
-        this.mCapturing = mCapturing;
     }
 
     public void setSignatureBitmap(Bitmap signature) {
@@ -231,10 +208,6 @@ public class DrawCanvas extends SurfaceView {
 
     public float getSignatureWidth() {
         return mPaint.getStrokeWidth();
-    }
-
-    public void setSignatureColor(int color) {
-        mSignatureColor = color;
     }
 
     /**
@@ -266,4 +239,7 @@ public class DrawCanvas extends SurfaceView {
         }
     }
 
+    public Paint getPaint() {
+        return mPaint;
+    }
 }

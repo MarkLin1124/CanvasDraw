@@ -27,6 +27,7 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
     private ArrayList<CircleView> useList = new ArrayList<>();
 
     private DrawCanvas mCanvas;
+    private int selectColor = 0;
 
     public DrawBoard(Context context) {
         super(context);
@@ -108,14 +109,17 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
         paintSmall = (CircleView) findViewById(R.id.paint_small);
         paintSmall.setOnClickListener(this);
         paintSmall.setSelect(true);
+        paintSmall.setTag(R.dimen.circle_radius_small);
         sizeList.add(paintSmall);
 
         paintNormal = (CircleView) findViewById(R.id.paint_normal);
         paintNormal.setOnClickListener(this);
+        paintNormal.setTag(R.dimen.circle_radius_normal);
         sizeList.add(paintNormal);
 
         paintLarge = (CircleView) findViewById(R.id.paint_large);
         paintLarge.setOnClickListener(this);
+        paintLarge.setTag(R.dimen.circle_radius_large);
         sizeList.add(paintLarge);
 
         //default draw paint
@@ -127,6 +131,10 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
         circleEraser = (CircleView) findViewById(R.id.eraser);
         circleEraser.setOnClickListener(this);
         useList.add(circleEraser);
+
+        //default paint color
+        mCanvas.initPaint(getResources().getDimension((int) paintSmall.getTag()), getResources().getColor((int) circleRed.getTag()));
+        selectColor = getResources().getColor((int) circleRed.getTag());
     }
 
     @Override
@@ -150,8 +158,12 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
                 onPaintSelect((CircleView) view);
                 break;
             case R.id.paint:
+                onUseSelect((CircleView) view);
+                mCanvas.getPaint().setColor(selectColor);
+                break;
             case R.id.eraser:
                 onUseSelect((CircleView) view);
+                mCanvas.getPaint().setColor(getResources().getColor(R.color.board_background));
                 break;
         }
     }
@@ -164,7 +176,8 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
         for (CircleView view : colorList) {
             if (view.getId() == circleView.getId()) {
                 view.setSelect(true);
-                mCanvas.getPaint().setColor(getResources().getColor((int) circleView.getTag()));
+                selectColor = getResources().getColor((int) circleView.getTag());
+                mCanvas.getPaint().setColor(selectColor);
             } else {
                 view.setSelect(false);
             }
@@ -179,6 +192,7 @@ public class DrawBoard extends RelativeLayout implements View.OnClickListener {
         for (CircleView view : sizeList) {
             if (view.getId() == circleView.getId()) {
                 view.setSelect(true);
+                mCanvas.getPaint().setStrokeWidth((getResources().getDimension((int) circleView.getTag())));
             } else {
                 view.setSelect(false);
             }
